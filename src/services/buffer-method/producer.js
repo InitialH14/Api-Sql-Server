@@ -15,8 +15,9 @@ async function fetchDataAndSendToKafka() {
     if (!pool) throw new Error('Database connection is not available');
 
     const result = await pool.request().query(`
-      SELECT TOP 100 Tagname, Value, Value_Timestamp
+      SELECT Tagname, Value, Value_Timestamp
       FROM [TopView].[dbo].[Snapshot]
+      WHERE Value_Timestamp > DATEADD(SECOND, -5, GETUTCDATE())
     `);
 
     for (let row of result.recordset) {
