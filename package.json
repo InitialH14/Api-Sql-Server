@@ -1,0 +1,31 @@
+{
+  "name": "scada-pln",
+  "version": "1.0.0",
+  "description": "project for create realtime database historian",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js",
+    "produce": "node src/services/buffer-method/producer.js",
+    "consume" : "node src/services/buffer-method/consumer.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "kafkajs": "^2.2.4",
+    "mssql": "^11.0.1",
+    "pg": "^8.13.3",
+    "redis": "^4.7.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "tedious": "^18.6.1",
+    "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
