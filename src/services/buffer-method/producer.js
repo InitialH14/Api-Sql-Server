@@ -4,10 +4,14 @@ const poolPromise = require('../../config/db');
 
 const kafka = new Kafka({ 
   clientId: 'snapshotProducer', 
-  brokers: ['localhost:9092'] 
+  brokers: ['localhost:9092'] ,
+  connectionTimeout: 3000,
+  requestTimeout: 5000
 });
 
-const producer = kafka.producer();
+const producer = kafka.producer({
+  	
+});
 
 async function fetchDataAndSendToKafka() {
   try {

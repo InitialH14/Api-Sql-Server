@@ -42,3 +42,7 @@ exports.getSnapshotsPooling = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
+exports.createSnapshots = async (req, res) => {
+	return
+}

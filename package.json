@@ -7,7 +7,7 @@
     "test": "jest",
     "start": "node server.js",
     "produce": "node src/services/buffer-method/producer.js",
-    "consume" : "node src/services/buffer-method/consumer.js"
+    "consume": "node src/services/buffer-method/consumer.js"
   },
   "author": "",
   "license": "ISC",
