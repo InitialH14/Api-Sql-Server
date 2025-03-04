@@ -74,3 +74,5 @@ const runConsumer = async () => {
 };
 
 runConsumer().catch(console.error);
+
+module.exports = runConsumer;

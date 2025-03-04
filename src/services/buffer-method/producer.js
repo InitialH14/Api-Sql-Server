@@ -49,3 +49,5 @@ async function startProducer() {
 }
 
 startProducer();
+
+module.exports = startProducer;
