@@ -51,9 +51,9 @@ const runConsumer = async () => {
             }
 
             const query = `
-              INSERT INTO snapshot_data (tagname, value, value_timestamp)
+              INSERT INTO snapshots_data (tagname, value, value_timestamp)
               VALUES ($1, $2, $3)
-              ON CONFLICT (value_timestamp) DO NOTHING;
+              ON CONFLICT (id, create_at) DO NOTHING;
             `;
             await client.query(query, [row.Tagname, value, row.Value_Timestamp]);
           }
