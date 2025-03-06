@@ -1,5 +1,4 @@
 const { Kafka } = require('kafkajs');
-const { io } = require('socket.io-client');
 const timescalePool = require('../../config/timescaleDb');
 
 const kafka = new Kafka({
@@ -8,10 +7,6 @@ const kafka = new Kafka({
 });
 
 const consumer = kafka.consumer({ groupId: 'scada-group' });
-const socket = io('http://localhost:5003');
-
-socket.on('connect', () => console.log('Connected to WebSocket Server'));
-socket.on('disconnect', () => console.log('Disconnected from WebSocket Server'));
 
 const runConsumer = async () => {
   await consumer.connect();
@@ -34,8 +29,6 @@ const runConsumer = async () => {
         if (!Array.isArray(data)) {
           data = [data];
         }
-
-        socket.emit('snapshotData', data);
 
         if (data.length === 0) return;
 
@@ -73,6 +66,4 @@ const runConsumer = async () => {
   });
 };
 
-runConsumer().catch(console.error);
-
-module.exports = runConsumer;
+module.exports = runConsumer ;

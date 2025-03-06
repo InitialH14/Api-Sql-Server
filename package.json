@@ -6,16 +6,17 @@
   "scripts": {
     "test": "jest",
     "start": "node server.js",
-    "produce": "node src/services/buffer-method/producer.js",
-    "consume": "node src/services/buffer-method/consumer.js"
+    "buffer": "node src/services/buffer-method/producer.js && node src/services/buffer-method/consumer.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^13.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "kafkajs": "^2.2.4",
+    "minimist": "^1.2.8",
     "mssql": "^11.0.1",
     "pg": "^8.13.3",
     "redis": "^4.7.0",

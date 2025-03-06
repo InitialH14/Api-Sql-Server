@@ -43,6 +43,49 @@ exports.getSnapshotsPooling = async (req, res) => {
     }
 }
 
-exports.createSnapshots = async (req, res) => {
-	return
-}
+exports.createSnapshot = async (snapshotName, databaseName) => {
+  try {
+      const pool = await poolPromise;
+
+      const checkSnapshotQuery = `
+          SELECT COUNT(*) AS count FROM sys.databases WHERE name = @snapshotName
+      `;
+      const checkResult = await pool.request()
+          .input('snapshotName', sql.NVarChar, snapshotName)
+          .query(checkSnapshotQuery);
+
+      if (checkResult.recordset[0].count > 0) {
+          return console.log('Snapshot sudah ada');
+      }
+
+      const getFileInfoQuery = `
+          SELECT TOP 1 name AS logicalName, physical_name AS dataFileName 
+          FROM sys.master_files 
+          WHERE database_id = DB_ID(@databaseName) AND type = 0
+      `;
+      const fileInfoResult = await pool.request()
+          .input('databaseName', sql.NVarChar, databaseName)
+          .query(getFileInfoQuery);
+
+      if (fileInfoResult.recordset.length === 0) {
+          return console.log('Database tidak ditemukan atau tidak memiliki file data.');
+      }
+
+      const { logicalName, dataFileName } = fileInfoResult.recordset[0];
+      const snapshotFile = dataFileName.replace('.mdf', '_snapshot.ss');
+
+      const createSnapshotQuery = `
+          CREATE DATABASE [${snapshotName}] ON 
+          (NAME = [${logicalName}], FILENAME = '${snapshotFile}') 
+          AS SNAPSHOT OF [${databaseName}]
+      `;
+
+      await pool.request().query(createSnapshotQuery);
+
+      console.log('Snapshot berhasil dibuat.');
+
+  } catch (error) {
+      console.error('Error:', error);
+  }
+};
+

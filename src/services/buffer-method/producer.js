@@ -9,11 +9,9 @@ const kafka = new Kafka({
   requestTimeout: 5000
 });
 
-const producer = kafka.producer({
-  	
-});
+const producer = kafka.producer({});
 
-async function fetchDataAndSendToKafka() {
+const fetchDataAndSendToKafka = async() => {
   try {
     const pool = await poolPromise; 
     if (!pool) throw new Error('Database connection is not available');
@@ -23,6 +21,8 @@ async function fetchDataAndSendToKafka() {
       FROM [TopView].[dbo].[Snapshot]
       WHERE Value_Timestamp > DATEADD(SECOND, -5, GETUTCDATE())
     `);
+    
+    console.log('System already connected! Get your coffee and enjoy the day!');
 
     for (let row of result.recordset) {
       await producer.send({
@@ -32,7 +32,8 @@ async function fetchDataAndSendToKafka() {
         }],
         
       });
-      console.log('Sent to Kafka:', row);
+
+      //console.log('Sent to Kafka:', row);
     }
   } catch (err) {
     console.error('Error fetching data:', err);
@@ -51,7 +52,5 @@ async function startProducer() {
     console.error('Failed to connect Kafka Producer:', err);
   }
 }
-
-startProducer();
 
 module.exports = startProducer;

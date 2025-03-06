@@ -3,7 +3,7 @@ const poolPromise = require('../../config/db');
 
 let io;
 
-const initWebSocket = (server) => {
+const initWebSocket = (server, time) => {
   io = new Server(server, {
     cors: { 
       origin: '*' 
@@ -19,7 +19,7 @@ const initWebSocket = (server) => {
     });
   });
 
-  setInterval(sendDataToClients, 5000);
+  setInterval(sendDataToClients, time);
 };
 
 const sendDataToClients = async () => {
