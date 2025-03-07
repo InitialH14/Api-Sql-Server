@@ -18,14 +18,14 @@ args
 args
 .command('get')
 .description('Start data ingestion from SQL server')
-.option('-m, --mode <mode>', 'Set ingestion mode', 'event-driven')
+.option('-m, --mode <mode>', 'Set ingestion mode', 'request')
 .option('-p, --port <port>', 'Port to use', 5003)
 .option('-i, --interval <interval>', 'Interval time to get data per batch', 5000)
 .action((options) => {
 
   console.log(`Getting data use ${options.mode} mode...`);
 
-  if(options.mode === 'realtime-streaming'){
+  if(options.mode === 'stream'){
       (
         async() => {
           try{
@@ -36,7 +36,7 @@ args
           }
         }
       )
-  } else if(options.mode === 'event-driven'){
+  } else if(options.mode === 'event'){
     (
       async() => {
         try{
@@ -47,7 +47,7 @@ args
         }
       }
     )();
-  } else if (options.mode === 'request-response'){
+  } else if (options.mode === 'request'){
     exports.requestResponse = require('./src/app');
   } else {
     console.log('Please use the mode correctly');

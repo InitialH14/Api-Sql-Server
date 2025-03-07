@@ -1,16 +1,16 @@
-# API untuk Migrasi Data dari SQL Server ke TimescaleDB
+# API for SQL Server to TimeScale DB Migration
 
-## 📌 Deskripsi
+## 📌 Description
 
-API ini digunakan untuk mengambil data realtime dari SQL Server dan menyimpannya ke dalam TimescaleDB menggunakan Node.js. API ini memungkinkan migrasi data historis maupun real-time dari SQL Server ke TimescaleDB, yang dirancang untuk menyimpan dan mengelola data time-series dengan efisien. Selain itu, API ini juga dapat digunakan untuk membuat snapshot di SQL Server.
+This project is used for take currently SQL Server data and save it into Timescale DB use Node.js. User can migrate historical and realtime data from SQL Server to TimescaleSB, created for save and manage time-series efficiently. Moreover, user can create snapshot in SQL Server use this project.
 
-Untuk migrasi data dari SQL Server ke TimescaleDB, API ini memiliki 3 mode berikut.
+For the migration, this API have 3 features below.
 
-1. Buffer menggunakan Kafka
-2. Realtime streaming menggunakan Websocket
-3. Request - Response
+1. Buffer using Kafka
+2. Realtime streaming using Websocket
+3. Request - response backend
 
-## 🚀 Teknologi yang Digunakan
+## 🚀 Tech in Project
 
 - **Node.js** (Backend)
 - **Express.js** (Framework API)
@@ -22,7 +22,16 @@ Untuk migrasi data dari SQL Server ke TimescaleDB, API ini memiliki 3 mode berik
 
 ---
 
-## 📡 Instalasi
+## 📡 Installation
+
+### Requirements
+
+1. Node Js
+2. Docker and Docker Compose
+3. SQL Server
+4. Postgress with TimescaleDB
+
+### How To Use
 
 1. **Clone repository**
 
@@ -37,13 +46,13 @@ Untuk migrasi data dari SQL Server ke TimescaleDB, API ini memiliki 3 mode berik
    npm install
    ```
 
-3. **Buat file konfigurasi `.env`** dan isi dengan informasi koneksi database:
+3. **Create configuration file `.env`** and fill with this information:
 
    ```env
-   SQL_SERVER_USER=your_sql_user
-   SQL_SERVER_PASSWORD=your_sql_password
-   SQL_SERVER_HOST=your_sql_host
-   SQL_SERVER_DATABASE=your_sql_database
+   DB_USER=your_sql_user
+   DB_PASS=your_sql_password
+   DB_HOST=your_sql_host
+   DB_NAME=your_sql_database
 
 
    DB_USER_TIMESCALE=your_timescale_user
@@ -52,11 +61,51 @@ Untuk migrasi data dari SQL Server ke TimescaleDB, API ini memiliki 3 mode berik
    DB_PASS_TIMESCALE=your_timescale_password
    ```
 
-4. **Install dan Jalankan Kafka dengan Docker (Untuk Mode Buffer menggunakan Kafka)**
+4. **Create `docker-compose.yaml` for Kafka and Zooskeeper installation**
 
-   Coming Soon
+   Fill the file with this informastion.
 
-5. **Jalankan server**
+   ```sh
+   services:
+      zookeeper:
+         image: confluentinc/cp-zookeeper:latest
+         container_name: zookeeper
+         restart: always
+         environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+
+      kafka:
+         image: confluentinc/cp-kafka:latest
+         container_name: kafka
+         restart: always
+         ports:
+            - "9092:9092"
+         environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+            KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_DELETE_TOPIC_ENABLE: "true"
+         depends_on:
+            - zookeeper
+   ```
+
+5. **Install Kafka and Zooskeeper**
+
+   Command for install or run Kafka on Docker
+
+   ```sh
+   docker-compose up -d
+   ```
+
+   Command for stop Kafka on Docker
+
+   ```sh
+   docker-compose down
+   ```
+
+6. **Run server**
    ```sh
    node server.js [command] [options] argument
    ```
@@ -65,23 +114,39 @@ Untuk migrasi data dari SQL Server ke TimescaleDB, API ini memiliki 3 mode berik
 
 ## 📌 API Command
 
-Comming Soon
+### Data Migration
+
+For data migration, user can use command `get`. To use the features, there are options you can choose.
+
+1. `stream` for realtime-streaming.
+2. `event` for buffering with Kafka.
+3. `request` for request-response as usual.
+
+### Create Snapshot
+
+User can create snapshot use command as simple as `create`.
 
 ---
 
-## ⚡ Struktur Proyek
+## ✏️ Notes
 
-Coming Soon
+### Realtime streaming vs Buffering, What's the Different?
+
+This features is functionally same, to get and migrate the realtime data. But there is a different. While realtime streaming migrate data querying and pull data continually, Buffering just querying simmulatenously and save it in Kafka temporarily. So your SQL Server not receive many query and it`s so efficient for big data.
+
+### Stay on Development
+
+I think there are many pieces can develop in the next time. So this project is not end and maybe next i create more features.
 
 ---
 
-## 🔗 Lisensi
+## 🔗 License
 
-Proyek ini menggunakan lisensi **MIT**. Bebas digunakan untuk keperluan pribadi maupun komersial.
+This project use **MIT** License. Free to use for individual and commercial.
 
 ---
 
-## 💬 Kontak
+## 💬 Contact
 
-Jika ada pertanyaan atau masalah, silakan hubungi:
+If any proble let's contact me:
 📧 Email: blaxxramadhan@gmail.com
