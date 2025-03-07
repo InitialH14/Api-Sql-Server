@@ -148,5 +148,5 @@ This project use **MIT** License. Free to use for individual and commercial.
 
 ## 💬 Contact
 
-If any proble let's contact me:
+If any problem let's contact me:
 📧 Email: blaxxramadhan@gmail.com
